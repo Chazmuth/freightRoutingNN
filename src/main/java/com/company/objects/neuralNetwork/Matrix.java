@@ -40,22 +40,6 @@ class Matrix {
 
     }
 
-    //feedforward function
-
-    public static Matrix feed(Matrix input, Matrix weights, Matrix biases){
-        Matrix ouput = new Matrix(1, weights.cols, "n");
-        for (int i = 0; i < biases.cols; i++) {
-            double h = 0;
-            for (int j = 0; j < weights.rows; j++) {
-                h+=input.data[0][j]*weights.data[i][j];
-            }
-            h+=biases.data[0][i];
-            ouput.data[0][i] = h;
-        }
-        
-        return ouput;
-    }
-
     public void add(double scaler) {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
@@ -83,6 +67,22 @@ class Matrix {
     }
 
     //adds a matrix to this one
+
+    public void subtract(Matrix matrix) {
+        if (matrix.rows == 1) {
+            for (int i = 0; i < this.rows; i++) {
+                for (int j = 0; j < this.cols; j++) {
+                    this.data[i][j] -= matrix.data[0][j];
+                }
+            }
+        } else {
+            for (int i = 0; i < this.rows; i++) {
+                for (int j = 0; j < this.cols; j++) {
+                    this.data[i][j] -= matrix.data[i][j];
+                }
+            }
+        }
+    }
 
     public static Matrix subtract(Matrix a, Matrix b) {
         Matrix temp = new Matrix(a.rows, a.cols, "n");
@@ -158,7 +158,7 @@ class Matrix {
         for (int i = 0; i < temp.rows; i++) {
             for (int j = 0; j < temp.cols; j++) {
                 double sum = 0;
-                for (int k = 0; k < a.cols; k++) {
+                for (int k = 0; k < a.rows; k++) {
                     sum += a.data[i][k] * b.data[k][j];
                 }
                 temp.data[i][j] = sum;
@@ -166,19 +166,6 @@ class Matrix {
         }
         return temp;
     }
-
-    public static Matrix dot(Matrix a, Matrix b){
-        Matrix result = new Matrix(a.rows, b.cols, "n");
-        for (int i = 0; i < b.cols; i++) {
-            double sum = 0;
-            for (int j = 0; j < a.cols; j++) {
-                sum+=a.data[0][j]*b.data[j][i];
-            }
-            result.data[0][i] = sum;
-        }
-        return result;
-    }
-    //multiplies one matrix by another and returns the result
 
     public static Matrix fromArray(double[] x) {
         Matrix temp = new Matrix(1, x.length, "n");
@@ -228,6 +215,10 @@ class Matrix {
     @Override
     public String toString() {
         return Arrays.deepToString(this.data).replace("], ", "]\n").replace("[[", "[").replace("]]", "]");
+    }
+
+    public static void main(String[] args){
+
     }
 }
 

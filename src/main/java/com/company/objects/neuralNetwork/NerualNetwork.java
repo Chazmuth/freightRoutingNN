@@ -49,20 +49,20 @@ public class NerualNetwork {
 
         Matrix derivativeBiases1 = Matrix.multiply(Matrix.multiply(derivativeBiases2, this.weights.get(1)), this.hiddenLayerStore.get(0).dsigmoid().dsigmoid());
 
-        Matrix derivativeWeights1 = Matrix.multiply(derivativeBiases1, this.input);
+        Matrix derivativeWeights1 = Matrix.multiply(this.input, derivativeBiases1);
 
         //gradient decente
-        derivativeBiases1.multiply(-learningRate);
-        this.biases.get(0).add(derivativeBiases1);
+        derivativeBiases1.multiply(learningRate);
+        this.biases.get(0).subtract(derivativeBiases1);
 
-        derivativeWeights1.multiply(-learningRate);
-        this.weights.get(0).add(derivativeWeights1);
+        derivativeWeights1.multiply(learningRate);
+        this.weights.get(0).subtract(derivativeWeights1);
 
-        derivativeBiases2.multiply(-learningRate);
-        this.biases.get(1).add(derivativeBiases2);
+        derivativeBiases2.multiply(learningRate);
+        this.biases.get(1).subtract(derivativeBiases2);
 
-        derivativeWeights2.multiply(-learningRate);
-        this.weights.get(1).add(derivativeWeights2);
+        derivativeWeights2.multiply(learningRate);
+        this.weights.get(1).subtract(derivativeWeights2);
     }
 
     public void train(int epochs, double learningRate, ArrayList<Matrix> traingingDataX,
@@ -71,8 +71,6 @@ public class NerualNetwork {
             double error = 0;
             for (int j = 0; j < traingingDataX.size(); j++) {
                 Matrix result = feedForward(traingingDataX.get(j));
-                System.out.println("RESULT");
-                System.out.println(result);
                 Matrix expectedResult = traingingDataY.get(j);
                 error += error(result, expectedResult);
                 backwardPropagation(result, expectedResult, learningRate);
@@ -104,7 +102,7 @@ public class NerualNetwork {
         yin = Matrix.fromArray(new double[]{0});
         traingingDataY.add(yin);
 
-        net.train(10000, 0.1, traingingDataX, traingingDataY);
+        net.train(10000000, 0.5, traingingDataX, traingingDataY);
     }
 
 }
