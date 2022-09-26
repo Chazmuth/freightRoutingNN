@@ -1,4 +1,4 @@
-package com.company.databaseFiles;
+package com.company.DBUtils;
 
 import java.sql.Connection;
 import java.sql.Statement;

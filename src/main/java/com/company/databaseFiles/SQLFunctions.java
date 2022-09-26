@@ -1,6 +1,7 @@
 package com.company.databaseFiles;
 
 
+import com.company.DBUtils.ConnectionStatementPair;
 import com.company.objects.graph.Edge;
 import com.company.objects.graph.Graph;
 
@@ -21,7 +22,7 @@ public class SQLFunctions {
             //forms a statement which is used to format the results from your SQL
 
             output = new ConnectionStatementPair(connection, statement);
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println("Error in the SQL class: " + e);
             output = new ConnectionStatementPair(null, null);
         }
@@ -35,6 +36,7 @@ public class SQLFunctions {
             String sql = "SELECT * FROM " + tableName; //this is just the sql command
             ResultSet resultSet = connectionStatementPair.getStatement().executeQuery(sql);
             //executes the command
+            System.out.println("done");
 
             //loops through the result set printing the result
             while (resultSet.next()) {
@@ -69,11 +71,11 @@ public class SQLFunctions {
             countResultSet.next();
             graph = new Graph(countResultSet.getInt(1));
 
-            while(resultSet.next()){
+            while (resultSet.next()) {
                 int source = Integer.parseInt(resultSet.getString("StartNode")) - 1;
                 int destination = Integer.parseInt(resultSet.getString("EndNode")) - 1;
                 StringBuilder stringCost = new StringBuilder(resultSet.getString("Cost"));
-                stringCost.delete(stringCost.length()-5, stringCost.length());
+                stringCost.delete(stringCost.length() - 5, stringCost.length());
                 int cost = Integer.parseInt(stringCost.toString());
                 int[] edgeData = {source, destination, cost};
                 graph.addEdge(new Edge(edgeData));
@@ -86,8 +88,33 @@ public class SQLFunctions {
         return graph;
     }
 
+    public static boolean checkUser(String password, String emailAddress) {
+        try {
+            ConnectionStatementPair connectionStatementPair = init();
+
+            String sql = "SELECT * FROM Users"; //this is just the sql command
+            ResultSet resultSet = connectionStatementPair.getStatement().executeQuery(sql);
+            //executes the command
+
+            //loops through the result set printing the result
+            for (int i = 1; i <= resultSet.getMetaData().getColumnCount(); i++) {
+                if (i > 1) System.out.print(",  ");
+                String columnValue = resultSet.getString(i);
+                System.out.print(resultSet.getMetaData().getColumnName(i) + " " + columnValue);
+            }
+            System.out.println("\n");
+
+            //closing connections so there are no deadlocks
+            resultSet.close();
+            connectionStatementPair.closeConnection();
+
+        } catch (Exception e) {
+            System.out.println("Error in the SQL class: " + e);
+        }
+        return true;
+    }
+
     public static void main(String[] args) {
-        getTable("Edges");
-        readGraph().printGraph();
+        checkUser("password", "henryjobling@gmail.com");
     }
 }
