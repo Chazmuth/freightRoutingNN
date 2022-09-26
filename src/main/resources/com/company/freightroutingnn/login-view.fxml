@@ -12,5 +12,4 @@
    <TextField fx:id="password" promptText="Password" />
     <Button onAction="#onHelloButtonClick" text="Log In" />
    <Button fx:id="signUp" mnemonicParsing="false" text="Sign Up" />
-   <AnchorPane prefHeight="200.0" prefWidth="200.0" />
 </VBox>

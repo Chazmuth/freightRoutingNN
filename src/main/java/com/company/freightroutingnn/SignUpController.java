@@ -5,15 +5,14 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class LoginController implements Initializable {
+public class SignUpController implements Initializable {
     @FXML
-    private TextField username;
+    private TextField emailAddress;
 
     @FXML
     private TextField password;
@@ -21,19 +20,12 @@ public class LoginController implements Initializable {
     @FXML
     private Button signUp;
 
-    @FXML
-    protected void onHelloButtonClick() {
-        System.out.println(username.getText());
-        System.out.println(password.getText());
-    }
-
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         signUp.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                SceneHandler.changeScene(actionEvent, "signup.fxml", "Sign Up", 320, 240);
+                SceneHandler.changeScene(actionEvent, "login-view.fxml", "Login", 320, 240);
             }
         });
     }
