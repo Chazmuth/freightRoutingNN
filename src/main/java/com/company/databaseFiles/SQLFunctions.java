@@ -36,7 +36,6 @@ public class SQLFunctions {
             String sql = "SELECT * FROM " + tableName; //this is just the sql command
             ResultSet resultSet = connectionStatementPair.getStatement().executeQuery(sql);
             //executes the command
-            System.out.println("done");
 
             //loops through the result set printing the result
             while (resultSet.next()) {
@@ -92,29 +91,33 @@ public class SQLFunctions {
         try {
             ConnectionStatementPair connectionStatementPair = init();
 
-            String sql = "SELECT * FROM Users"; //this is just the sql command
-            ResultSet resultSet = connectionStatementPair.getStatement().executeQuery(sql);
+            PreparedStatement statement = connectionStatementPair.getConnection().prepareStatement("SELECT password FROM Users WHERE userID=?");
+
+            statement.setString(1, emailAddress);
+
+            ResultSet resultSet = statement.executeQuery();
             //executes the command
 
-            //loops through the result set printing the result
-            for (int i = 1; i <= resultSet.getMetaData().getColumnCount(); i++) {
-                if (i > 1) System.out.print(",  ");
-                String columnValue = resultSet.getString(i);
-                System.out.print(resultSet.getMetaData().getColumnName(i) + " " + columnValue);
+            //checks that the password is the same as the one in the database
+            while (resultSet.next()) {
+                if (resultSet.getString("password").equals(password)) {
+                    System.out.println("correct password");
+                }
             }
-            System.out.println("\n");
 
             //closing connections so there are no deadlocks
             resultSet.close();
             connectionStatementPair.closeConnection();
 
         } catch (Exception e) {
-            System.out.println("Error in the SQL class: " + e);
+            System.out.println("Error in the SQL class: ");
+            e.printStackTrace();
         }
         return true;
     }
 
     public static void main(String[] args) {
-        checkUser("password", "henryjobling@gmail.com");
+        getTable("Users");
+        checkUser("password2", "zach@gmail.com");
     }
 }
