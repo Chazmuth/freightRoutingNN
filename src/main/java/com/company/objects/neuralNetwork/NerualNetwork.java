@@ -104,7 +104,6 @@ public class NerualNetwork {
 
         net.train(10000000, 0.5, traingingDataX, traingingDataY);
     }
-
 }
 
 //add a save function that saves the weights biases, layers, all thats needed

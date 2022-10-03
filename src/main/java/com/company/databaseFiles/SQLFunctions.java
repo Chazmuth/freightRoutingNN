@@ -6,6 +6,7 @@ import com.company.objects.graph.Edge;
 import com.company.objects.graph.Graph;
 
 import java.sql.*;
+import java.util.regex.Pattern;
 
 public class SQLFunctions {
 
@@ -88,6 +89,8 @@ public class SQLFunctions {
     }
 
     public static boolean checkUser(String password, String emailAddress) {
+        Boolean valid = false;
+
         try {
             ConnectionStatementPair connectionStatementPair = init();
 
@@ -101,7 +104,7 @@ public class SQLFunctions {
             //checks that the password is the same as the one in the database
             while (resultSet.next()) {
                 if (resultSet.getString("password").equals(password)) {
-                    System.out.println("correct password");
+                    valid = true;
                 }
             }
 
@@ -113,11 +116,35 @@ public class SQLFunctions {
             System.out.println("Error in the SQL class: ");
             e.printStackTrace();
         }
-        return true;
+        return valid;
+    }
+
+    public static void enterUser(String emailAddress, String password) {
+        try {
+            ConnectionStatementPair connectionStatementPair = init();
+
+            PreparedStatement statement = connectionStatementPair.getConnection().prepareStatement("INSERT INTO Users(userID, password) VALUES(?,?)");
+
+            statement.setString(1, emailAddress);
+            statement.setString(2, password);
+
+            statement.executeUpdate();
+            //executes the command
+            System.out.println("User entered successfully");
+        }catch (Exception e){
+            System.out.println("Error in the SQL class: ");
+            e.printStackTrace();
+        }
+    }
+
+    public static boolean validateEmail(String emailAddress){
+        String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
+                + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
+        //allows for a regular email address only without dots before the @
+        return Pattern.compile(regexPattern).matcher(emailAddress).matches();
     }
 
     public static void main(String[] args) {
-        getTable("Users");
-        checkUser("password2", "zach@gmail.com");
+
     }
 }

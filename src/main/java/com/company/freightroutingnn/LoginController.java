@@ -1,5 +1,6 @@
 package com.company.freightroutingnn;
 
+import com.company.databaseFiles.SQLFunctions;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -22,9 +23,12 @@ public class LoginController implements Initializable {
     private Button signUp;
 
     @FXML
-    protected void onHelloButtonClick() {
-        System.out.println(username.getText());
-        System.out.println(password.getText());
+    protected void onLoginButtonClick() {
+        if(SQLFunctions.checkUser(password.getText(), username.getText())){
+            System.out.println("access granted");
+        }else{
+            System.out.println("Wrong username or password");
+        }
     }
 
 

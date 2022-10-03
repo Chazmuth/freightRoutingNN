@@ -1,10 +1,12 @@
 package com.company.freightroutingnn;
 
+import com.company.databaseFiles.SQLFunctions;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 import java.net.URL;
@@ -18,6 +20,9 @@ public class SignUpController implements Initializable {
     private TextField password;
 
     @FXML
+    private Label userMessage;
+
+    @FXML
     private Button signUp;
 
     @Override
@@ -25,7 +30,12 @@ public class SignUpController implements Initializable {
         signUp.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                SceneHandler.changeScene(actionEvent, "login-view.fxml", "Login", 320, 240);
+                if (SQLFunctions.validateEmail(emailAddress.getText())/*checks email is valid*/) {
+                    SQLFunctions.enterUser(emailAddress.getText(), password.getText());
+                    SceneHandler.changeScene(actionEvent, "login-view.fxml", "Login", 320, 240); //changes scene
+                }else{
+                    userMessage.setText("Please enter a valid email address");
+                }
             }
         });
     }

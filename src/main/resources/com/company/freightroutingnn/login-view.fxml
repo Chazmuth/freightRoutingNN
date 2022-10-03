@@ -10,6 +10,6 @@
     </padding>
    <TextField fx:id="username" promptText="Username" />
    <TextField fx:id="password" promptText="Password" />
-    <Button onAction="#onHelloButtonClick" text="Log In" />
+    <Button onAction="#onLoginButtonClick" text="Log In" />
    <Button fx:id="signUp" mnemonicParsing="false" text="Sign Up" />
 </VBox>
