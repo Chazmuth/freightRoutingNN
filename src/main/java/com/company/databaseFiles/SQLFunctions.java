@@ -5,6 +5,7 @@ import com.company.DBUtils.ConnectionStatementPair;
 import com.company.objects.graph.Edge;
 import com.company.objects.graph.Graph;
 
+import java.security.MessageDigest;
 import java.sql.*;
 import java.util.regex.Pattern;
 
@@ -91,6 +92,8 @@ public class SQLFunctions {
     public static boolean checkUser(String password, String emailAddress) {
         Boolean valid = false;
 
+        password = hashPassword(password);
+
         try {
             ConnectionStatementPair connectionStatementPair = init();
 
@@ -120,13 +123,14 @@ public class SQLFunctions {
     }
 
     public static void enterUser(String emailAddress, String password) {
+        String hashedPassword = hashPassword(password);
         try {
             ConnectionStatementPair connectionStatementPair = init();
 
             PreparedStatement statement = connectionStatementPair.getConnection().prepareStatement("INSERT INTO Users(userID, password) VALUES(?,?)");
 
             statement.setString(1, emailAddress);
-            statement.setString(2, password);
+            statement.setString(2, hashedPassword);
 
             statement.executeUpdate();
             //executes the command
@@ -144,7 +148,19 @@ public class SQLFunctions {
         return Pattern.compile(regexPattern).matcher(emailAddress).matches();
     }
 
-    public static void main(String[] args) {
+    public static String hashPassword(String password){
+        String hashedPassword = "";
+        try {
+            MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+            messageDigest.update(password.getBytes());
+            hashedPassword = new String(messageDigest.digest());
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return hashedPassword;
+    }
 
+    public static void main(String[] args) {
+        System.out.println(checkUser("password", "hfuiah@gmail.com"));
     }
 }
