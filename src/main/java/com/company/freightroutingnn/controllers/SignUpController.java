@@ -1,6 +1,7 @@
-package com.company.freightroutingnn;
+package com.company.freightroutingnn.controllers;
 
 import com.company.databaseFiles.SQLFunctions;
+import com.company.freightroutingnn.SceneHandler;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;

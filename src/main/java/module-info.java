@@ -6,4 +6,6 @@ module com.company.freightroutingnn {
 
     opens com.company.freightroutingnn to javafx.fxml;
     exports com.company.freightroutingnn;
+    exports com.company.freightroutingnn.controllers;
+    opens com.company.freightroutingnn.controllers to javafx.fxml;
 }
